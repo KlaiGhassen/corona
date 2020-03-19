@@ -1,0 +1,82 @@
+table {
+    width: 100%;
+}
+
+.mat-form-field {
+    font-size: 14px;
+    width: 100%;
+}
+
+td,
+th {
+    width: 25%;
+}
+
+.card {
+    margin-top: 20px;
+    margin-left: 20px;
+    padding: 16px;
+    background-color: white;
+    border: 2px solid transparent;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.37);
+    border-radius: 12px;
+}
+
+.row-card {
+    height: 150px;
+}
+
+.container {
+    width: 100%;
+    height: fit-content;
+    margin-right: 20px;
+}
+
+.fit {
+    height: fit-content;
+}
+
+.field-name {
+    font-weight: 900;
+}
+
+.wid-120 {
+    width: 120px;
+}
+
+.wid-150 {
+    width: 150px;
+}
+
+.wid-100-p {
+    width: 100%;
+}
+
+.bg-alice {
+    background-color: aliceblue;
+}
+
+.example-full-width {
+    width: 100%;
+}
+
+.button-mar {
+    margin-top: -20px;
+}
+
+.bg-blue {
+    background-color: #0766d2;
+    color: white;
+}
+
+.mx-height {
+    max-height: 300px;
+}
+
+.point {
+    cursor: pointer;
+}
+
+.height-40 {
+    height: 40px;
+}

@@ -1,0 +1,362 @@
+<div fxLayout="row" class="container">
+    <div fxLayout="column" fxFlex="66">
+        <div class="mt-8 ml-8">
+            <button class="point" [routerLink]="['/declarations']">
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+        </div>
+        <div
+            class="card"
+            fxLayout="row wrap"
+            fxLayoutGap="12px"
+            fxLayoutAlign="start center"
+        >
+            <div>
+                <span class="field-name">id :</span>
+                <span>{{ ticket.id }}</span>
+            </div>
+            <div>
+                <span class="field-name">titre :</span>
+                <span>{{ ticket.title }}</span>
+            </div>
+            <div>
+                <span class="field-name">Gouvernorat :</span>
+                <span>{{ ticket.state }}</span>
+            </div>
+            <div>
+                <span class="field-name">Municipalité :</span>
+                <span>{{ ticket.city }}</span>
+            </div>
+            <div>
+                <span class="field-name">Creation Time :</span>
+                <span>{{ ticket.createdAt | date: "medium" }}</span>
+            </div>
+        </div>
+        <div
+            class="card"
+            fxLayout="row wrap"
+            fxLayoutGap="12px"
+            fxLayoutAlign="start center"
+        >
+            <div class="mx-12 wid-150">
+                <span class="field-name">Type :</span>
+                <button mat-icon-button [matMenuTriggerFor]="menu2">
+                    <span *ngIf="ticket.type === 0">isolation</span>
+                    <span *ngIf="ticket.type === 1">prices</span>
+                    <span *ngIf="ticket.type === 2">monopoly</span>
+                    <span *ngIf="ticket.type === 3">proceduresBreak</span>
+                    <span *ngIf="ticket.type === 4">closingBreak</span>
+                    <mat-icon *ngIf="!loadingType">arrow_drop_down</mat-icon>
+                    <img
+                        *ngIf="loadingType"
+                        class="mx-4"
+                        src="assets/images/loading.gif"
+                        style="width: 15px; height: 15px;"
+                        alt=""
+                    />
+                </button>
+                <mat-menu #menu2="matMenu">
+                    <button
+                        mat-menu-item
+                        *ngIf="ticket.type !== 0"
+                        (click)="changeType(ticket.id, 0)"
+                    >
+                        <!-- <mat-icon>dialpad</mat-icon> -->
+                        <span>isolation</span>
+                    </button>
+                    <button
+                        mat-menu-item
+                        *ngIf="ticket.type !== 1"
+                        (click)="changeType(ticket.id, 1)"
+                    >
+                        <!-- <mat-icon>voicemail</mat-icon> -->
+                        <span>prices</span>
+                    </button>
+                    <button
+                        mat-menu-item
+                        *ngIf="ticket.type !== 2"
+                        (click)="changeType(ticket.id, 2)"
+                    >
+                        <!-- <mat-icon>notifications_off</mat-icon> -->
+                        <span>monopoly</span>
+                    </button>
+                    <button
+                        mat-menu-item
+                        *ngIf="ticket.type !== 3"
+                        (click)="changeType(ticket.id, 3)"
+                    >
+                        <!-- <mat-icon>notifications_off</mat-icon> -->
+                        <span>proceduresBreak</span>
+                    </button>
+                    <button
+                        mat-menu-item
+                        *ngIf="ticket.type !== 4"
+                        (click)="changeType(ticket.id, 4)"
+                    >
+                        <!-- <mat-icon>notifications_off</mat-icon> -->
+                        <span>closingBreak</span>
+                    </button>
+                </mat-menu>
+            </div>
+
+            <div class="mx-12 wid-120">
+                <span class="field-name">Status :</span>
+                <button mat-icon-button [matMenuTriggerFor]="menu">
+                    <span *ngIf="ticket.status === 0">Waiting</span>
+                    <span *ngIf="ticket.status === 1">Opened</span>
+                    <span *ngIf="ticket.status === 2">On hold</span>
+                    <span *ngIf="ticket.status === 3">Resolved</span>
+                    <span *ngIf="ticket.status === 4">Closed</span>
+                    <mat-icon *ngIf="!loadingType">arrow_drop_down</mat-icon>
+                    <img
+                        *ngIf="loadingType"
+                        class="mx-4"
+                        src="assets/images/loading.gif"
+                        style="width: 15px; height: 15px;"
+                        alt=""
+                    />
+                </button>
+                <mat-menu #menu="matMenu">
+                    <button
+                        mat-menu-item
+                        *ngIf="ticket.status !== 0"
+                        (click)="changeStatus(ticket.id, 0)"
+                    >
+                        <!-- <mat-icon>dialpad</mat-icon> -->
+                        <span>Waiting</span>
+                    </button>
+                    <button
+                        mat-menu-item
+                        *ngIf="ticket.status !== 1"
+                        (click)="changeStatus(ticket.id, 1)"
+                    >
+                        <!-- <mat-icon>voicemail</mat-icon> -->
+                        <span>Opened</span>
+                    </button>
+                    <button
+                        mat-menu-item
+                        *ngIf="ticket.status !== 2"
+                        (click)="changeStatus(ticket.id, 2)"
+                    >
+                        <!-- <mat-icon>notifications_off</mat-icon> -->
+                        <span>On hold</span>
+                    </button>
+                    <button
+                        mat-menu-item
+                        *ngIf="ticket.status !== 3"
+                        (click)="changeStatus(ticket.id, 3)"
+                    >
+                        <!-- <mat-icon>notifications_off</mat-icon> -->
+                        <span>Resolved</span>
+                    </button>
+                    <button
+                        mat-menu-item
+                        *ngIf="ticket.status !== 4"
+                        (click)="changeStatus(ticket.id, 4)"
+                    >
+                        <!-- <mat-icon>notifications_off</mat-icon> -->
+                        <span>Closed</span>
+                    </button>
+                </mat-menu>
+            </div>
+            <div class="mx-12 wid-120s">
+                <span class="field-name">Priority :</span>
+                <button mat-icon-button [matMenuTriggerFor]="menu1">
+                    <!-- <mat-icon>more_vert</mat-icon> -->
+                    <span *ngIf="ticket.priority === 0">Low</span>
+                    <span *ngIf="ticket.priority === 1">Medium</span>
+                    <span *ngIf="ticket.priority === 2">High</span>
+                    <span *ngIf="ticket.priority === 3">Critical</span>
+                    <span *ngIf="ticket.priority === null">Chose priority</span>
+                    <mat-icon *ngIf="!loadingStatus">arrow_drop_down</mat-icon>
+                    <img
+                        *ngIf="loadingStatus"
+                        class="mx-4"
+                        src="assets/images/loading.gif"
+                        style="width: 15px; height: 15px;"
+                        alt=""
+                    />
+                </button>
+                <mat-menu #menu1="matMenu">
+                    <button
+                        mat-menu-item
+                        *ngIf="ticket.property !== 0"
+                        (click)="changePriority(ticket.id, 0)"
+                    >
+                        <!-- <mat-icon>dialpad</mat-icon> -->
+                        <span>Low</span>
+                    </button>
+                    <button
+                        mat-menu-item
+                        *ngIf="ticket.property !== 1"
+                        (click)="changePriority(ticket.id, 1)"
+                    >
+                        <!-- <mat-icon>voicemail</mat-icon> -->
+                        <span>Medium</span>
+                    </button>
+                    <button
+                        mat-menu-item
+                        *ngIf="ticket.property !== 2"
+                        (click)="changePriority(ticket.id, 2)"
+                    >
+                        <!-- <mat-icon>notifications_off</mat-icon> -->
+                        <span>High</span>
+                    </button>
+                    <button
+                        mat-menu-item
+                        *ngIf="ticket.property !== 3"
+                        (click)="changePriority(ticket.id, 3)"
+                    >
+                        <!-- <mat-icon>notifications_off</mat-icon> -->
+                        <span>Critical</span>
+                    </button>
+                </mat-menu>
+            </div>
+        </div>
+
+        <div
+            class="card"
+            fxLayout="row wrap"
+            fxLayoutGap="12px"
+            fxLayoutAlign="start center"
+        >
+            <span class="field-name">Description</span>
+            <p>{{ ticket.description }}</p>
+        </div>
+
+        <div
+            class="card"
+            fxLayout="row"
+            fxLayoutGap="12px"
+            fxLayoutAlign="start start"
+        >
+            <div fxFlex="40">
+                <span class="field-name">Al mortakeb :</span>
+                <span>{{ ticket.madeBy }}</span>
+            </div>
+            <div fxFlex="60" fxLayout="column">
+                <div>
+                    <span class="field-name w-100">Al mouballegh : </span>
+                    <span> {{ ticket.fullname }}</span>
+                </div>
+                <div>
+                    <span class="field-name w-100">tel : </span>
+                    <span> {{ ticket.tel }}</span>
+                </div>
+                <div>
+                    <span class="field-name w-100">email : </span>
+                    <span> {{ ticket.email }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div
+            class="card"
+            fxLayout="column"
+            fxLayoutGap="12px"
+            fxLayoutAlign="start start"
+        >
+            <div>
+                <span class="field-name"
+                    >Approvals : {{ approvalsNumber }}</span
+                >
+            </div>
+
+            <div
+                *ngFor="let approval of approvals"
+                class="card wid-100-p m-4 bg-alice"
+                fxLayout="column"
+            >
+                <div fxLayout="row">
+                    <span class="field-name mr-8">Description</span>
+                    <div>
+                        {{ approval.description }}
+                    </div>
+                </div>
+                <div
+                    fxLayout="row"
+                    fxLayoutAlign="space-between center"
+                    class="mt-8"
+                >
+                    <div fxLayout="row">
+                        <span class="mr-8">{{ approval.email }}</span>
+                        <span>{{ approval.tel }}</span>
+                    </div>
+                    <div>
+                        {{ approval.createdAt | date: "medium" }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div fxLayout="column" class="card pt-0 fit" fxFlex="33">
+        <h4>
+            Notes :
+        </h4>
+        <div class="mx-8 mt-0" fxLayout="column">
+            <mat-form-field class="example-full-width" appearance="outline">
+                <textarea
+                    [(ngModel)]="noteField"
+                    #ctrl="ngModel"
+                    matInput
+                    placeholder="Ajouter un note"
+                    rows="4"
+                ></textarea>
+            </mat-form-field>
+            <button
+                *ngIf="noteId === null"
+                mat-raised-button
+                color="primary"
+                class="w-100 button-mar bg-blue"
+                (click)="addNote()"
+                [disabled]="noteField.length === 0"
+            >
+                ajouter
+            </button>
+            <div *ngIf="noteId !== null" fxLayout="row">
+                <button
+                    [disabled]="notes[noteIndex].description === noteField"
+                    mat-raised-button
+                    color="primary"
+                    class="w-100 button-mar bg-blue"
+                    (click)="editNote()"
+                >
+                    Modifier
+                </button>
+                <button
+                    *ngIf="noteId !== null"
+                    mat-raised-button
+                    class="w-100 button-mar"
+                    (click)="annuler()"
+                >
+                    Annuler
+                </button>
+            </div>
+        </div>
+        <ng-container *ngFor="let note of notes">
+            <div
+                *ngIf="noteId !== note.id"
+                class="card mx-8 bg-alice"
+                fxLayout="column"
+            >
+                <p class="max-height">
+                    {{ note.description }}
+                </p>
+                <div fxLayout="row" fxLayoutAlign="space-between center">
+                    <div fxLayout="row">
+                        {{ note.createdAt | date: "medium" }}
+                    </div>
+                    <div fxLayout="row">
+                        <button class="point" (click)="startEditingNote(note)">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                        <button class="point">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+</div>

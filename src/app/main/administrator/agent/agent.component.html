@@ -1,0 +1,110 @@
+<div fxLayout="row" class="container">
+    <div fxLayout="column" fxFlex="66">
+        <div class="mt-8 ml-8">
+            <button class="point" [routerLink]="['/administrator/agents']">
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+        </div>
+        <div
+            class="card"
+            fxLayout="row wrap"
+            fxLayoutGap="12px"
+            fxLayoutAlign="start center"
+        >
+            <form [formGroup]="agentForm">
+                <div
+                    class="mx-32 my-12"
+                    fxLayout="row"
+                    fxLayoutAlign="space-between center"
+                >
+                    <div fxLayout="row wrap" fxLayoutGap="30px">
+                        <div class="wid-120">
+                            <mat-form-field class="wid-120">
+                                <input
+                                    matInput
+                                    placeholder="nom"
+                                    formControlName="nom"
+                                />
+                            </mat-form-field>
+                        </div>
+
+                        <div class="wid-120">
+                            <mat-form-field class="wid-120">
+                                <input
+                                    matInput
+                                    placeholder="prenom"
+                                    formControlName="prenom"
+                                />
+                            </mat-form-field>
+                        </div>
+
+                        <div class="wid-120">
+                            <mat-form-field class="wid-120">
+                                <input
+                                    matInput
+                                    placeholder="username"
+                                    formControlName="username"
+                                />
+                            </mat-form-field>
+                        </div>
+
+                        <div class="wid-120">
+                            <mat-form-field class="wid-120">
+                                <input
+                                    matInput
+                                    placeholder="password"
+                                    formControlName="password"
+                                />
+                            </mat-form-field>
+                        </div>
+
+                        <div class="wid-120">
+                            <mat-form-field class="wid-120">
+                                <input
+                                    matInput
+                                    placeholder="cin"
+                                    formControlName="cin"
+                                />
+                            </mat-form-field>
+                        </div>
+
+                        <div class="wid-120">
+                            <mat-form-field class="wid-120">
+                                <input
+                                    matInput
+                                    placeholder="tel"
+                                    formControlName="tel"
+                                />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div
+                *ngIf="message !== ''"
+                style="background-color: rgb(180, 231, 255); padding: 24px; border-radius: 5px"
+                class="register"
+                fxLayout="column"
+                fxLayoutAlign="start start"
+            >
+                <span class="text">{{ message }}</span>
+            </div>
+        </div>
+        <button
+            mat-raised-button
+            (click)="edit()"
+            color="primary"
+            class="w-100 height-40 bg-blue ml-24 mt-8 height-40"
+            [disabled]="agentForm.invalid || agentForm.pristine"
+        >
+            <img
+                *ngIf="loadingEdit"
+                class="mx-4"
+                src="assets/images/loading.gif"
+                style="width: 15px; height: 15px;"
+                alt=""
+            />
+            Modifier
+        </button>
+    </div>
+</div>

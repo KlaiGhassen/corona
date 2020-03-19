@@ -1,0 +1,443 @@
+<div id="products" class="page-layout carded fullwidth inner-scroll">
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg mat-accent-bg"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+        <!-- <div
+            class="header mat-accent-bg"
+            fxLayout="column"
+            fxLayoutAlign="center center"
+            fxLayout.gt-xs="row"
+            fxLayoutAlign.gt-xs="space-between center"
+        >
+           
+            <div
+                class="logo my-12 m-sm-0"
+                fxLayout="row"
+                fxLayoutAlign="start center"
+            ></div>
+            
+
+            
+            <div
+                class="search-input-wrapper mx-24 m-md-0"
+                fxFlex="1 0 auto"
+                fxLayout="row"
+                fxLayoutAlign="start center"
+            >
+                <label for="search" class="mr-8">
+                    <mat-icon class="secondary-text">search</mat-icon>
+                </label>
+                <mat-form-field floatLabel="never" fxFlex="1 0 auto">
+                    <input
+                        id="search"
+                        matInput
+                        #filter
+                        placeholder="Search"
+                        (keyup)="applyFilter($event.target.value)"
+                    />
+                </mat-form-field>
+            </div> 
+            
+        </div>-->
+        <!-- / HEADER -->
+
+        <!-- CONTENT CARD -->
+        <div class="content-card mat-white-bg mt-8">
+            <form [formGroup]="filterForm">
+                <div
+                    class="mx-32 my-12"
+                    fxLayout="row"
+                    fxLayoutAlign="space-between center"
+                >
+                    <div fxLayout="row wrap" fxLayoutGap="30px">
+                        <div class="wid-120">
+                            <mat-form-field class="wid-120">
+                                <mat-select
+                                    placeholder="Gouvernorat"
+                                    formControlName="state"
+                                    (valueChange)="gouvernoratChange($event)"
+                                >
+                                    <mat-option
+                                        *ngFor="let item of gouvernorat"
+                                        [value]="item.nom"
+                                    >
+                                        {{ item.nom }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="wid-120">
+                            <mat-form-field
+                                *ngIf="
+                                    selectedIndex !== undefined &&
+                                    selectedIndex !== null
+                                "
+                                class=" wid-120"
+                            >
+                                <mat-select
+                                    placeholder="Municipalité"
+                                    formControlName="city"
+                                >
+                                    <mat-option
+                                        *ngFor="
+                                            let item of gouvernorat[
+                                                selectedIndex
+                                            ].subGouvernorat
+                                        "
+                                        [value]="item.nom"
+                                    >
+                                        {{ item.nom }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field
+                                *ngIf="
+                                    selectedIndex === undefined ||
+                                    selectedIndex === null
+                                "
+                                class=" wid-120"
+                            >
+                                <mat-select
+                                    placeholder="Municipalité"
+                                    formControlName="city"
+                                >
+                                    <mat-option [value]="null"> </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="wid-120">
+                            <mat-form-field class="wid-120">
+                                <mat-select
+                                    placeholder="Type"
+                                    formControlName="type"
+                                >
+                                    <mat-option
+                                        *ngFor="let item of type"
+                                        [value]="item.value"
+                                    >
+                                        {{ item.text }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="wid-120">
+                            <mat-form-field class="wid-120">
+                                <mat-select
+                                    placeholder="Status"
+                                    formControlName="status"
+                                >
+                                    <mat-option
+                                        *ngFor="let item of status"
+                                        [value]="item.value"
+                                    >
+                                        {{ item.text }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="wid-120">
+                            <mat-form-field class="wid-120">
+                                <mat-select
+                                    placeholder="Priorité"
+                                    formControlName="priority"
+                                >
+                                    <mat-option
+                                        *ngFor="let item of priority"
+                                        [value]="item.value"
+                                    >
+                                        {{ item.text }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <button
+                        mat-raised-button
+                        class="wid-120 bg-blue"
+                        (click)="search()"
+                    >
+                        Search
+                    </button>
+                </div>
+            </form>
+            <mat-divider></mat-divider>
+            <div>
+                <mat-form-field class="mx-32">
+                    <input
+                        matInput
+                        (keyup)="applyFilter($event.target.value)"
+                        placeholder="Rechercher"
+                    />
+                </mat-form-field>
+            </div>
+            <table
+                mat-table
+                [dataSource]="dataSource"
+                class="mat-elevation-z8"
+                matSort
+            >
+                <!--- Note that these columns can be defined in any order.
+                  The actual rendered columns are set as a property on the row definition" -->
+
+                <!-- Position Column -->
+                <ng-container matColumnDef="id">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        ID
+                    </th>
+                    <td mat-cell *matCellDef="let item">
+                        {{ item.id }}
+                    </td>
+                </ng-container>
+
+                <!-- Position Column -->
+                <ng-container matColumnDef="type">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        Type
+                    </th>
+                    <td mat-cell *matCellDef="let item">
+                        <span *ngIf="item.id === 0">إحتكار</span>
+                        <span *ngIf="item.id === 1">غلق</span>
+                        <span *ngIf="item.id === 2">الحجر</span>
+                        <span *ngIf="item.id === 3">الأسعار</span>
+                        <span *ngIf="item.id === 4">Tawsiyet</span>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="status">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        status
+                    </th>
+                    <td mat-cell *matCellDef="let item">
+                        <button mat-icon-button [matMenuTriggerFor]="menu">
+                            <span *ngIf="item.status === 0">Waiting</span>
+                            <span *ngIf="item.status === 1">Opened</span>
+                            <span *ngIf="item.status === 2">On hold</span>
+                            <span *ngIf="item.status === 3">Resolved</span>
+                            <span *ngIf="item.status === 4">Closed</span>
+                            <mat-icon
+                                *ngIf="
+                                    !(
+                                        loadingId === item.id &&
+                                        loadingField === 'status'
+                                    )
+                                "
+                                >arrow_drop_down</mat-icon
+                            >
+                            <img
+                                *ngIf="
+                                    loadingId === item.id &&
+                                    loadingField === 'status'
+                                "
+                                class="mx-4"
+                                src="assets/images/loading.gif"
+                                style="width: 15px; height: 15px;"
+                                alt=""
+                            />
+                        </button>
+                        <mat-menu #menu="matMenu">
+                            <button
+                                mat-menu-item
+                                *ngIf="item.status !== 0"
+                                (click)="changeStatus(item.id, 0)"
+                            >
+                                <!-- <mat-icon>dialpad</mat-icon> -->
+                                <span>Waiting</span>
+                            </button>
+                            <button
+                                mat-menu-item
+                                *ngIf="item.status !== 1"
+                                (click)="changeStatus(item.id, 1)"
+                            >
+                                <!-- <mat-icon>voicemail</mat-icon> -->
+                                <span>Opened</span>
+                            </button>
+                            <button
+                                mat-menu-item
+                                *ngIf="item.status !== 2"
+                                (click)="changeStatus(item.id, 2)"
+                            >
+                                <!-- <mat-icon>notifications_off</mat-icon> -->
+                                <span>On hold</span>
+                            </button>
+                            <button
+                                mat-menu-item
+                                *ngIf="item.status !== 3"
+                                (click)="changeStatus(item.id, 3)"
+                            >
+                                <!-- <mat-icon>notifications_off</mat-icon> -->
+                                <span>Resolved</span>
+                            </button>
+                            <button
+                                mat-menu-item
+                                *ngIf="item.status !== 4"
+                                (click)="changeStatus(item.id, 4)"
+                            >
+                                <!-- <mat-icon>notifications_off</mat-icon> -->
+                                <span>Closed</span>
+                            </button>
+                        </mat-menu>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="priority">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        priority
+                    </th>
+                    <td mat-cell *matCellDef="let item">
+                        <button mat-icon-button [matMenuTriggerFor]="menu">
+                            <!-- <mat-icon>more_vert</mat-icon> -->
+                            <span *ngIf="item.priority === 0">Low</span>
+                            <span *ngIf="item.priority === 1">Medium</span>
+                            <span *ngIf="item.priority === 2">High</span>
+                            <span *ngIf="item.priority === 3">Critical</span>
+                            <span *ngIf="item.priority === null"
+                                >Chose priority</span
+                            >
+                            <mat-icon
+                                *ngIf="
+                                    !(
+                                        loadingId === item.id &&
+                                        loadingField === 'priority'
+                                    )
+                                "
+                                >arrow_drop_down</mat-icon
+                            >
+                            <img
+                                *ngIf="
+                                    loadingId === item.id &&
+                                    loadingField === 'priority'
+                                "
+                                class="mx-4"
+                                src="assets/images/loading.gif"
+                                style="width: 15px; height: 15px;"
+                                alt=""
+                            />
+                        </button>
+                        <mat-menu #menu="matMenu">
+                            <button
+                                mat-menu-item
+                                *ngIf="item.property !== 0"
+                                (click)="changePriority(item.id, 0)"
+                            >
+                                <!-- <mat-icon>dialpad</mat-icon> -->
+                                <span>Low</span>
+                            </button>
+                            <button
+                                mat-menu-item
+                                *ngIf="item.property !== 1"
+                                (click)="changePriority(item.id, 1)"
+                            >
+                                <!-- <mat-icon>voicemail</mat-icon> -->
+                                <span>Medium</span>
+                            </button>
+                            <button
+                                mat-menu-item
+                                *ngIf="item.property !== 2"
+                                (click)="changePriority(item.id, 2)"
+                            >
+                                <!-- <mat-icon>notifications_off</mat-icon> -->
+                                <span>High</span>
+                            </button>
+                            <button
+                                mat-menu-item
+                                *ngIf="item.property !== 3"
+                                (click)="changePriority(item.id, 3)"
+                            >
+                                <!-- <mat-icon>notifications_off</mat-icon> -->
+                                <span>Critical</span>
+                            </button>
+                        </mat-menu>
+                    </td>
+                </ng-container>
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="title">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        Title
+                    </th>
+                    <td mat-cell *matCellDef="let item">
+                        {{ item.title }}
+                    </td>
+                </ng-container>
+
+                <!-- Weight Column -->
+                <ng-container matColumnDef="description">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        Description
+                    </th>
+                    <td mat-cell *matCellDef="let item">
+                        {{ item.description }}
+                    </td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="state">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        State
+                    </th>
+                    <td mat-cell *matCellDef="let item">
+                        {{ item.state }}
+                    </td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="city">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        city
+                    </th>
+                    <td mat-cell *matCellDef="let item">
+                        {{ item.city }}
+                    </td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="approved">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        approved
+                    </th>
+                    <td mat-cell *matCellDef="let item">
+                        {{ item.city }}
+                    </td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="tel">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        tel
+                    </th>
+                    <td mat-cell *matCellDef="let item">
+                        {{ item.tel }}
+                    </td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="buttons">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+                    <td mat-cell *matCellDef="let item">
+                        <button
+                            class="point"
+                            [routerLink]="['/declarations/', item.id]"
+                        >
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr
+                    mat-row
+                    *matRowDef="let row; columns: displayedColumns"
+                    routerLinkActive="router-link-active"
+                ></tr>
+            </table>
+
+            <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+        </div>
+        <!-- / CONTENT CARD -->
+    </div>
+    <!-- / CENTER -->
+</div>
