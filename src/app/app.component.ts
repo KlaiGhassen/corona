@@ -1,3 +1,4 @@
+import { NotificationsService } from "./notifications.service";
 import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import { DOCUMENT } from "@angular/common";
 import { Platform } from "@angular/cdk/platform";
@@ -12,6 +13,7 @@ import { FuseSplashScreenService } from "@fuse/services/splash-screen.service";
 import { FuseTranslationLoaderService } from "@fuse/services/translation-loader.service";
 
 import { navigation } from "app/navigation/navigation";
+import * as jwt_decode from "jwt-decode";
 
 @Component({
     selector: "app",
@@ -39,6 +41,7 @@ export class AppComponent implements OnInit, OnDestroy {
      */
     constructor(
         @Inject(DOCUMENT) private document: any,
+        private _notificationService: NotificationsService,
         private _fuseConfigService: FuseConfigService,
         private _fuseNavigationService: FuseNavigationService,
         private _fuseSidebarService: FuseSidebarService,
@@ -85,6 +88,7 @@ export class AppComponent implements OnInit, OnDestroy {
      * On init
      */
     ngOnInit(): void {
+        console.log(this.getDecodedAccessToken(localStorage.getItem("token")));
         // Subscribe to config changes
         this._fuseConfigService.config
             .pipe(takeUntil(this._unsubscribeAll))
@@ -97,6 +101,14 @@ export class AppComponent implements OnInit, OnDestroy {
                     this.document.body.classList.remove("boxed");
                 }
             });
+    }
+
+    getDecodedAccessToken(token: string): any {
+        try {
+            return jwt_decode(token);
+        } catch (Error) {
+            return null;
+        }
     }
 
     /**

@@ -16,8 +16,12 @@ export class GloablService {
         this._userSubject = new BehaviorSubject({ username: "" });
     }
 
-    get user(): any | Observable<any> {
+    get user(): Observable<any> {
         return this._userSubject.asObservable();
+    }
+
+    thisUser() {
+        return this.currentUser;
     }
 
     set user(value) {

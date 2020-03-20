@@ -1,3 +1,4 @@
+import { NotificationsService } from "./../../../notifications.service";
 import { DeclarationsService } from "./../declarations.service";
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { fuseAnimations } from "@fuse/animations";
@@ -12,6 +13,8 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
     animations: fuseAnimations
 })
 export class DeclarationsComponent implements OnInit {
+    notifications = 1;
+
     gouvernorat: any;
     status: any;
     priority: any;
@@ -52,7 +55,8 @@ export class DeclarationsComponent implements OnInit {
 
     constructor(
         private service: DeclarationsService,
-        private _formBuilder: FormBuilder
+        private _formBuilder: FormBuilder,
+        private _notificationService: NotificationsService
     ) {
         this.gouvernorat = gouvernorat;
         this.gouvernorat.unshift({ nom: null, subGouvernorat: [] });
@@ -77,6 +81,21 @@ export class DeclarationsComponent implements OnInit {
         this.gouvernorat.forEach(elem => {
             elem.subGouvernorat.unshift({ nom: null });
         });
+        this.newDeclarations();
+    }
+
+    newDeclarations() {
+        this._notificationService.listenToDeclarations().subscribe(data => {
+            this.data.unshift(data[0]);
+            this.dataSource = this.data;
+            this.notifications = this.notifications + 1;
+            console.log(this.notifications);
+        });
+    }
+
+    closeNotifications() {
+        this.notifications = 0;
+        console.log(this.notifications);
     }
 
     search() {

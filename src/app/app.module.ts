@@ -1,3 +1,5 @@
+import { AuthenticationService } from "./main/authentication/authentication.service";
+import { AdministratorGuard } from "./main/authentication/administrator.guard";
 import { LoginComponent } from "./main/authentication/login/login.component";
 import { DeclarationsModule } from "./main/declarations/declarations.module";
 import { NgModule, APP_INITIALIZER } from "@angular/core";
@@ -33,6 +35,7 @@ registerLocaleData(localeFr, "fr-FR", localeFrExtra);
 import { GloablService } from "./gloabl.service";
 import { Error404pageModule } from "./components/error404page/error404page.module";
 import { TokenInterceptorService } from "./main/authentication/token-interceptor.service";
+import { AuthenticationGuard } from "./main/authentication/authentication.guard";
 
 export function GlobalServiceFactory(provider: GloablService) {
     return () => provider.load();
@@ -47,13 +50,15 @@ const appRoutes: Routes = [
     {
         path: "declarations",
         loadChildren:
-            "./main/declarations/declarations.module#DeclarationsModule"
+            "./main/declarations/declarations.module#DeclarationsModule",
+        canActivate: [AuthenticationGuard]
     },
     {
         path: "administrator",
         loadChildren:
             //   "./main/declarations/declarations.module#DeclarationsModule"
-            "./main/administrator/administrator.module#AdministratorModule"
+            "./main/administrator/administrator.module#AdministratorModule",
+        canActivate: [AdministratorGuard]
     },
     {
         path: "",
@@ -114,6 +119,8 @@ const appRoutes: Routes = [
     ],
     bootstrap: [AppComponent],
     providers: [
+        AuthenticationGuard,
+        AdministratorGuard,
         GloablService,
         {
             provide: HTTP_INTERCEPTORS,

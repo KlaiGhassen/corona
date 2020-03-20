@@ -165,14 +165,29 @@
                 </div>
             </form>
             <mat-divider></mat-divider>
-            <div>
-                <mat-form-field class="mx-32">
-                    <input
-                        matInput
-                        (keyup)="applyFilter($event.target.value)"
-                        placeholder="Rechercher"
-                    />
-                </mat-form-field>
+            <div fxLayout="row" fxLayoutAlign="space-between center">
+                <div>
+                    <span class="field-name ml-32"
+                        >Declarations : {{ data.length }}</span
+                    >
+                    <mat-form-field class="mx-32">
+                        <input
+                            matInput
+                            (keyup)="applyFilter($event.target.value)"
+                            placeholder="Rechercher"
+                        />
+                    </mat-form-field>
+                </div>
+                <div
+                    *ngIf="notifications !== 0"
+                    class="mr-32"
+                    style="background-color: rgb(228, 177, 228); padding: 8px; border-radius: 5px"
+                >
+                    <span class="pt-12 field-name">{{ notifications }}</span>
+                    <button mat-icon-button (click)="closeNotifications()">
+                        <mat-icon class="pl-8 s-20">close</mat-icon>
+                    </button>
+                </div>
             </div>
             <table
                 mat-table
