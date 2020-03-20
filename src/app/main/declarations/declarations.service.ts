@@ -20,7 +20,9 @@ export class DeclarationsService {
         if (parameters.priority === null) delete parameters.priority;
         if (parameters.status === null) delete parameters.status;
         if (parameters.type === null) delete parameters.type;
-        return this.http.get<any>(url + "/api/ticket/", { params: parameters });
+        return this.http.get<any>(url + "/api/agent/ticket/", {
+            params: parameters
+        });
     }
 
     getOneTicket(id) {

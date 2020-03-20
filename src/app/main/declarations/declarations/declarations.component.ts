@@ -13,7 +13,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
     animations: fuseAnimations
 })
 export class DeclarationsComponent implements OnInit {
-    notifications = 1;
+    notifications = 0;
 
     gouvernorat: any;
     status: any;
@@ -102,8 +102,9 @@ export class DeclarationsComponent implements OnInit {
         this.service
             .getTicketsSearch(this.filterForm.getRawValue())
             .subscribe(res => {
-                console.log("filtered Data", res);
                 this.dataSource = res;
+                this.dataSource.paginator = this.paginator;
+                this.dataSource.sort = this.sort;
             });
     }
 

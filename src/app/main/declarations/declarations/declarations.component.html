@@ -45,7 +45,7 @@
         <!-- / HEADER -->
 
         <!-- CONTENT CARD -->
-        <div class="content-card mat-white-bg mt-8">
+        <div fusePerfectScrollbar class="content-card mat-white-bg mt-8">
             <form [formGroup]="filterForm">
                 <div
                     class="mx-32 my-12"
@@ -190,6 +190,7 @@
                 </div>
             </div>
             <table
+                fusePerfectScrollbar
                 mat-table
                 [dataSource]="dataSource"
                 class="mat-elevation-z8"
@@ -214,11 +215,11 @@
                         Type
                     </th>
                     <td mat-cell *matCellDef="let item">
-                        <span *ngIf="item.id === 0">إحتكار</span>
-                        <span *ngIf="item.id === 1">غلق</span>
-                        <span *ngIf="item.id === 2">الحجر</span>
-                        <span *ngIf="item.id === 3">الأسعار</span>
-                        <span *ngIf="item.id === 4">Tawsiyet</span>
+                        <span *ngIf="item.type === 0">إحتكار</span>
+                        <span *ngIf="item.type === 1">غلق</span>
+                        <span *ngIf="item.type === 2">الحجر</span>
+                        <span *ngIf="item.type === 3">الأسعار</span>
+                        <span *ngIf="item.type === 4">Tawsiyet</span>
                     </td>
                 </ng-container>
 
