@@ -9,6 +9,7 @@ import {
     Route,
     Router
 } from "@angular/router";
+import { DomSanitizer } from "@angular/platform-browser";
 
 @Component({
     selector: "app-declaration",
@@ -27,12 +28,12 @@ export class DeclarationComponent implements OnInit {
     loadingType = false;
 
     notes = [];
-
+    typeOfMedia: any;
     ticket: any;
     ticketID: number;
 
     snapshot: any;
-
+    media = null;
     noteField = "";
     noteId = null;
     noteIndex = null;
@@ -42,7 +43,8 @@ export class DeclarationComponent implements OnInit {
     constructor(
         private service: DeclarationsService,
         private activatedRoute: ActivatedRoute,
-        private router: Router
+        private router: Router,
+        private _sanitizer: DomSanitizer
     ) {
         this.gouvernorat = gouvernorat;
         this.status = status;
@@ -61,6 +63,39 @@ export class DeclarationComponent implements OnInit {
     getTicket() {
         this.service.getOneTicket(this.ticketID).subscribe(res => {
             this.ticket = res[0];
+            this.service.downloadMedia(this.ticket.media).subscribe(res => {
+                if (this.ticket.media.substr(0, 5) === "video") {
+                    this.typeOfMedia = "video";
+                    this.media = new Blob([new Uint8Array(res)], {
+                        type: "video/mp4"
+                    });
+                    this.media = URL.createObjectURL(this.media);
+                }
+                if (this.ticket.media.substr(0, 5) === "audio") {
+                    this.typeOfMedia = "audio";
+
+                    this.media = new Blob([new Uint8Array(res)], {
+                        type: "audio/mp3"
+                    });
+                    this.media = URL.createObjectURL(this.media);
+                }
+                if (this.ticket.media.substr(0, 5) === "image") {
+                    this.typeOfMedia = "image";
+
+                    this.media = new Blob([new Uint8Array(res)], {
+                        type: "image/png"
+                    });
+                    this.media = URL.createObjectURL(this.media);
+                }
+                this.media = this._sanitizer.bypassSecurityTrustResourceUrl(
+                    this.media
+                );
+                console.log(this.media);
+
+                /*      var bytes = new Uint8Array(res);
+                     this.media = "data:video/mp4;base64," + encode(bytes);
+                     console.log(this.media) */
+            });
         });
     }
     getNotes() {

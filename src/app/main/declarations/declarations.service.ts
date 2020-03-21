@@ -24,7 +24,12 @@ export class DeclarationsService {
             params: parameters
         });
     }
-
+    downloadMedia(fileName) {
+        this.http;
+        return this.http.get(`${url}/api/ticket/download/${fileName}`, {
+            responseType: "arraybuffer"
+        });
+    }
     getOneTicket(id) {
         return this.http.get<any>(url + "/api/agent/ticket/" + id);
     }

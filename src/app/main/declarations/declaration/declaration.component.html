@@ -289,74 +289,96 @@
             </div>
         </div>
     </div>
-
-    <div fxLayout="column" class="card pt-0 fit" fxFlex="33">
-        <h4>
-            Notes :
-        </h4>
-        <div class="mx-8 mt-0" fxLayout="column">
-            <mat-form-field class="example-full-width" appearance="outline">
-                <textarea
-                    [(ngModel)]="noteField"
-                    #ctrl="ngModel"
-                    matInput
-                    placeholder="Ajouter un note"
-                    rows="4"
-                ></textarea>
-            </mat-form-field>
-            <button
-                *ngIf="noteId === null"
-                mat-raised-button
-                color="primary"
-                class="w-100 button-mar bg-blue"
-                (click)="addNote()"
-                [disabled]="noteField.length === 0"
-            >
-                ajouter
-            </button>
-            <div *ngIf="noteId !== null" fxLayout="row">
+    <div fxLayout="column" fxFlex="33">
+        <div fxLayout="column" class="card pt-0 fit" fxFlex="100">
+            <h4>
+                Notes :
+            </h4>
+            <div class="mx-8 mt-0" fxLayout="column">
+                <mat-form-field class="example-full-width" appearance="outline">
+                    <textarea
+                        [(ngModel)]="noteField"
+                        #ctrl="ngModel"
+                        matInput
+                        placeholder="Ajouter un note"
+                        rows="4"
+                    ></textarea>
+                </mat-form-field>
                 <button
-                    [disabled]="notes[noteIndex].description === noteField"
+                    *ngIf="noteId === null"
                     mat-raised-button
                     color="primary"
                     class="w-100 button-mar bg-blue"
-                    (click)="editNote()"
+                    (click)="addNote()"
+                    [disabled]="noteField.length === 0"
                 >
-                    Modifier
+                    ajouter
                 </button>
-                <button
-                    *ngIf="noteId !== null"
-                    mat-raised-button
-                    class="w-100 button-mar"
-                    (click)="annuler()"
-                >
-                    Annuler
-                </button>
-            </div>
-        </div>
-        <ng-container *ngFor="let note of notes">
-            <div
-                *ngIf="noteId !== note.id"
-                class="card mx-8 bg-alice"
-                fxLayout="column"
-            >
-                <p class="max-height">
-                    {{ note.description }}
-                </p>
-                <div fxLayout="row" fxLayoutAlign="space-between center">
-                    <div fxLayout="row">
-                        {{ note.createdAt | date: "medium" }}
-                    </div>
-                    <div fxLayout="row">
-                        <button class="point" (click)="startEditingNote(note)">
-                            <mat-icon>edit</mat-icon>
-                        </button>
-                        <button class="point">
-                            <mat-icon>delete</mat-icon>
-                        </button>
-                    </div>
+                <div *ngIf="noteId !== null" fxLayout="row">
+                    <button
+                        [disabled]="notes[noteIndex].description === noteField"
+                        mat-raised-button
+                        color="primary"
+                        class="w-100 button-mar bg-blue"
+                        (click)="editNote()"
+                    >
+                        Modifier
+                    </button>
+                    <button
+                        *ngIf="noteId !== null"
+                        mat-raised-button
+                        class="w-100 button-mar"
+                        (click)="annuler()"
+                    >
+                        Annuler
+                    </button>
                 </div>
             </div>
-        </ng-container>
+            <ng-container *ngFor="let note of notes">
+                <div
+                    *ngIf="noteId !== note.id"
+                    class="card mx-8 bg-alice"
+                    fxLayout="column"
+                >
+                    <p class="max-height">
+                        {{ note.description }}
+                    </p>
+                    <div fxLayout="row" fxLayoutAlign="space-between center">
+                        <div fxLayout="row">
+                            {{ note.createdAt | date: "medium" }}
+                        </div>
+                        <div fxLayout="row">
+                            <button
+                                class="point"
+                                (click)="startEditingNote(note)"
+                            >
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                            <button class="point">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+        <div class="card pt-0 fit" fxLayoutAlign="center center" fxFlex="100">
+            <video
+                controls
+                *ngIf="typeOfMedia == 'video'"
+                style="max-width: 100%;
+            height: auto;
+            vertical-align: top;
+            border: none;"
+                class="p-24"
+            >
+                <source [src]="media" class="py-24" type="video/mp4" />
+            </video>
+
+            <img class="py-24" *ngIf="typeOfMedia == 'image'" [src]="media" />
+            <audio controls *ngIf="typeOfMedia == 'audio'">
+                <source [src]="media" type="audio/mp3" />
+            </audio>
+        </div>
     </div>
 </div>
